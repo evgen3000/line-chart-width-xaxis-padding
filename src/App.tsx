@@ -40,7 +40,6 @@ const calculateZScores = (values: number[]): number[] => {
 
 function segmentLineZAboveThreshold<T extends Record<string, any>>(
   data: T[],
-  valueKey: "pv" | "uv",
   zKey: "pv_z" | "uv_z",
   baseColor: string,
   threshold = 1,
@@ -60,7 +59,6 @@ function segmentLineZAboveThreshold<T extends Record<string, any>>(
 
     currentSegment.push(a);
 
-    // переход из одного режима в другой — вставляем точку
     if (colorA !== colorB) {
       const t = (threshold - za) / (zb - za);
       const interpolated: T = {
@@ -82,7 +80,6 @@ function segmentLineZAboveThreshold<T extends Record<string, any>>(
       currentSegment.push(interpolated);
       segments.push({ data: [...currentSegment], stroke: currentColor });
 
-      // начинаем новый сегмент с этой точки
       currentSegment = [interpolated];
       currentColor = colorB;
     }
@@ -145,13 +142,11 @@ export default function App() {
 
   const pvSegments = segmentLineZAboveThreshold(
     dataWithZ,
-    "pv",
     "pv_z",
     "#8884d8",
   );
   const uvSegments = segmentLineZAboveThreshold(
     dataWithZ,
-    "uv",
     "uv_z",
     "#82ca9d",
   );
